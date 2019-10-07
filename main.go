@@ -5,8 +5,6 @@ import (
 	"net/http"
 )
 
-type server struct{}
-
 func home (w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
@@ -29,7 +27,11 @@ func home (w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func main() {
+func handleRequests() {
 	http.HandleFunc("/", home)
 	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func main() {
+	handleRequests()
 }
