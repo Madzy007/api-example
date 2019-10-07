@@ -3,7 +3,33 @@ package main
 import (
 	"log"
 	"net/http"
+	"fmt"
+	"time"
+	"encoding/json"
 )
+
+//Customer is the data structure that defines a customer
+type Customer struct {
+	CustID int `json:"cust_id"`
+	FirstName string `json:"first_name"`
+	LastName string `json:"last_name"`
+	CreatedAt time.Time `json:"created_at"`
+	LastLogin time.Time `json:"last_login"`
+	FaveGame string `json:"fave_game"`
+}
+
+//Customers is an array of all instances of Customer
+type Customers []Customer
+
+func allCustomers(w http.ResponseWriter, r *http.Request) {
+	customers := Customers{
+		Customer{CustID:00000, FirstName:"Test", LastName:"Tested", CreatedAt: time.Now() , LastLogin: time.Now(), FaveGame:"Test Game"},
+	}
+	
+	fmt.Println("Reached all customer api endpoint")
+	json.NewEncoder(w).Encode(customers)
+}
+
 
 func home (w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
@@ -29,6 +55,7 @@ func home (w http.ResponseWriter, r *http.Request) {
 
 func handleRequests() {
 	http.HandleFunc("/", home)
+	http.HandleFunc("/customers", allCustomers)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
